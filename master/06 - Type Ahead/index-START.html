@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+  const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  const cities = [];
+
+  fetch(endpoint)
+    .then(blob => blob.json())
+    .then(data => cities.push(...data));
+
+  //takes the string to match and the array to filter the matches from
+  //returns the filtered array
+  function findmatches(wordTyped, cities) {
+    return cities.filter( place => {
+      //g and i are Regular Expression options, short for global and case insensitive
+      const regex = new RegExp(wordTyped, 'gi');
+      return place.city.match(regex) || place.state.match(regex);
+    });
+  }
+
+  //takes the matching places (city or state) and displays them in html
+  function displayMatches() {
+    //get the array of filtered matches using findMatches function
+    const matchedArray = findmatches(this.value, cities);
+    
+    //build html string to display each result
+    var html = matchedArray.map(place => {
+      const regex = new RegExp(this.value, 'gi');
+      const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
+      const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
+      console.log(cityName);
+      console.log(stateName);
+      return `
+        <li>
+          <span>${cityName}, ${stateName}</span>
+        </li>
+      `;
+    }).join("");
+
+    //set the inner html of the unordered suggestions list to replace initial html
+    suggestions.innerHTML = html;
+  }
+
+  //grabs the search input html element
+  const searchInput = document.querySelector(".search")
+  //grabs the suggestions html element
+  const suggestions = document.querySelector(".suggestions")
+
+  //runs display matches every time something in the input changes
+  searchInput.addEventListener("keyup", displayMatches);
+
+</script>
+</body>
+</html>
