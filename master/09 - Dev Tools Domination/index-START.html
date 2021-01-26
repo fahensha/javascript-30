@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Console Tricks!</title>
+</head>
+<body>
+
+  <p onClick="makeGreen()">×BUSS×DOWN×</p>
+
+  <script>
+    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'Hugo', age: 8 }, {name: 'Wrenly', age: 2}];
+
+    //can set break points for when elements are changed!
+    //inspect element > break on > attribute modifications
+    function makeGreen() {
+      const p = document.querySelector('p');
+      p.style.color = '#BADA55';
+      p.style.fontSize = '50px';
+    }
+
+    // Regular console log messages
+    console.log("Hallo Erde");
+
+    // Interpolated, using back ticks and %s
+    const numPushups = 42069;
+    console.log(`Guess how many pushups I did today? Pushup count: ${numPushups}`);
+
+    console.log("Hey whats up %s", "sarah");
+
+    // Styled
+    console.log("%c This will be in a different font", "font-style: helvetica; " + 
+      "font-size: 20px");
+
+    // warning!
+    console.warn("Unauthorized cashews!");
+
+    // Error :|
+    console.error("You will rue this day! Rue it!");
+
+    // Info
+    // unfortunately the info styling has since been removed, making
+    // this feature practically useless :( which is very sad
+    console.info("Just so you know, I'm detecting oaky-nuttiness");
+
+    // Testing
+    console.assert(1 === 2, "Uhhhh, no it doesn't");
+
+    // clearing, apparently this might drive a developer crazy
+    console.clear();
+  
+    // Viewing DOM Elements, one of the most useful tips!
+    const p = document.querySelector('p');
+    console.dir(p);
+
+    // Grouping together, I'm amazed this works and wondering how its implemented
+    dogs.forEach(dog => {
+      console.group(`${dog.name}`);
+      console.log(`${dog.name} is a good dog!!!!`);
+      console.log(`How long has ${dog.name} been a good dog? ${dog.age} years`);
+      console.log(`${dog.name} is ${dog.age * 7} dog years old`);
+      console.groupEnd(`${dog.name}`);
+    });
+
+    // counting
+    console.count("Frances");
+    console.count("Frances");
+    console.count("Tziarra");
+    console.count("Tziarra");
+    console.count("Frances");
+    console.count("Frances");
+    console.count("Frances");
+    console.count("Tziarra");
+
+    // timing
+    console.time("that's so fetch");
+    const endpoint = `https://gist.githubusercontent.com/kinlane/1eefd411c707118c5357/raw/137f36dc285a995cfa78a6c7a435de549bf184f8/city-of-chicago-social-media-accounts.json`;
+    const accounts = [];
+    fetch(endpoint)
+      .then(blob => blob.json())
+      .then(data => {
+        //console.log(data);
+        accounts.push(...data.facebook[0]);
+      });
+    console.log(accounts);
+    console.timeEnd("that's so fetch");
+  </script>
+</body>
+</html>
